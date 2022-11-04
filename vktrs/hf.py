@@ -1,6 +1,7 @@
 from pathlib import Path
 import torch
 from torch import autocast
+from diffusers.models import AutoencoderKL
 from diffusers import (
     StableDiffusionImg2ImgPipeline,
     StableDiffusionPipeline,
@@ -23,7 +24,8 @@ class HfHelper:
         device_img2img = None,
         device_text2img = None,
         model_path = '.',
-        model_id = "CompVis/stable-diffusion-v1-4",
+        model_id = "runwayml/stable-diffusion-v1-5",
+        vae = AutoencoderKL.from_pretrained("stabilityai/sd-vae-ft-mse"),
         download=True,
     ):
         if not device_img2img:
@@ -35,6 +37,7 @@ class HfHelper:
         self.device_text2img = device_text2img
         self.model_path = model_path
         self.model_id = model_id
+        self.vae = vae
         self.download = download
         self.load_pipelines()
 
@@ -44,6 +47,7 @@ class HfHelper:
         if self.download:
             img2img = StableDiffusionImg2ImgPipeline.from_pretrained(
                 self.model_id,
+                self.vae,
                 revision="fp16", 
                 torch_dtype=torch.float16,
                 use_auth_token=True
