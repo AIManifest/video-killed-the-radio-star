@@ -12,7 +12,7 @@ dependencies = [
     'yt-dlp',
     'python-tsp',
     'webvtt-py', # only need this if srv2 isn't available
-    'pytokenizations',
+    #'pytokenizations',
     ###################
     #bunch of other requirements because colab...
     ###################
